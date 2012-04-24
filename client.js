@@ -1,26 +1,23 @@
-Drawings = new Meteor.Collection();
-Drawings.subscribe();
 
-if (Meteor.is_client) {
-  Template.hello.greeting = function () {
-    return "Welcome to pictogroup.";
-  };
+var options = {};
 
-  Template.hello.events = {
-    'click input' : function () {
-      // template data, if any, is available in 'this'
-      if (typeof console !== 'undefined')
-        var ctx = initCanvas();
-		var options = {ctx: ctx};
+$("#start-drawing").click(function () {
+        options = initCanvas();
 		var drawObj = new Draw(options);
+		$("select").removeClass("hidden");
+		$("#clear-drawing").removeClass("hidden");
+		$(this).addClass("hidden");
         initDrawingSession(drawObj);
-    }
-  };
-}
+    });
+
+$("#clear-drawing").click(function () {
+	options.canvas.width = options.canvas.width;
+});
+
 var initCanvas = function() {
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
-    return ctx;
+    return {ctx : ctx, canvas : canvas};
 };
 
 var selectColor = function(drawObj) {
@@ -57,6 +54,7 @@ var Draw = function (options) {
 	this.line = [];
 	this.ctx = options.ctx;
 	this.isDrawing = false;
+	this.canvas = options.canvas;
 	};
 
 Draw.prototype.startDraw = function (x, y) {
@@ -91,9 +89,3 @@ var getCursorCoords = function (ctx) {
     });
     
 };
-
-if (Meteor.is_server) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
-}
