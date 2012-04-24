@@ -1,0 +1,6 @@
+{"name" : "GuessWhat",
+"version" : "0.1",
+"description" : "Guess what your friend is drawing",
+"author" : "Steve and Kevin",
+"dependencies" : {"handlebars" : "1.0.5", "socket.io", "0.9.6"},
+"engine" : "node>=0.6.12"}
