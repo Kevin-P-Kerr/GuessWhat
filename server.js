@@ -1,6 +1,7 @@
 var http = require('http');
 var url = require("url");
 var fs = require('fs');
+var io = require("socket.io");
 
 function start(route) {
 	function onRequest(request, response) {
@@ -23,8 +24,18 @@ function start(route) {
 		response.write(content);
 		response.end();
 	} 
-	http.createServer(onRequest).listen(8000);
+	var server = http.createServer(onRequest);
+    io = io.listen(server);
+    server.listen(8000);
 	console.log("Server has started");
+
+    io.sockets.on('connection', function(socket){
+        socket.emit('hello', {who:"you"});
+        socket.on('how-are-you', function(data) {
+            console.log(data);
+            socket.emit('im-well', {feeling:'fine'})
+        })
+    });
 };
 
 exports.start = start;

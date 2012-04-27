@@ -89,3 +89,10 @@ var getCursorCoords = function (ctx) {
     });
     
 };
+
+var socket = io.connect('http://localhost:8000');
+socket.emit('how-are-you', {from:"me"});
+
+socket.on('im-well', function(data) {
+    console.log(data);
+});
