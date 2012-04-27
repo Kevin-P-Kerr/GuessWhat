@@ -1,0 +1,12 @@
+/* CSS declarations go here */
+
+.hidden {
+	display: none;
+}
+#canvas-wrap {
+    position: relative;
+}
+
+#canvas {
+    border: green 1px solid;
+}

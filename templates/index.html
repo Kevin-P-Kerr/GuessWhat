@@ -1,0 +1,28 @@
+<DOCTYPE HTML>
+<html>
+<head>
+  <title>pictogroup</title>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="./templates/public.css" />
+</head>
+
+<body>
+  <div class="hello">
+    <h1>Hello World!</h1>
+    <input id="start-drawing" type="button" value="start drawing" />
+    <input id="clear-drawing" class="hidden" type="button" value="clear drawing" />
+    <select class="hidden">
+        <option value="black">black</option>
+        <option value="purple">purple</option>
+        <option value="blue">blue</option>
+        <option value="yellow">yellow</option>
+        <option value="green">green</option>
+        <option value="red">red</option>
+    </select>
+  </div>
+  <div id="canvas-wrap">
+        <canvas width="500" height="500" id="canvas"></canvas>
+  </div>
+	<script type="text/javascript" src="../client.js"> </script>
+</body>
+</html>
