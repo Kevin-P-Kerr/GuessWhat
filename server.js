@@ -52,7 +52,8 @@ function start(route) {
 					var newRoom = new rooms.Room(obj);
                     roomData[obj.roomName] = newRoom;
                     socket.join(obj.roomName);
-					socket.emit("roomCreated", {room : obj.roomName});
+                    console.log('nr obj: '+newRoom);
+					socket.emit("roomCreated", newRoom);
                     socket.broadcast.emit("current-rooms", roomData);
 				});
 			}

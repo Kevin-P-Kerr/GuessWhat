@@ -29,8 +29,17 @@ var updateCurrentRoom = function(room) {
                   .html("<h3>" + room + "</h3>");
 };
 
+var updateCurrentPlayers = function (players) {
+    var $ul = $('#current-players ul');
+    $ul.empty();
+    players.forEach(function(player) {
+        $ul.append('<li>'+player.name+'</li>');
+    });
+};
+
 socket.on("roomCreated", function (data) {
-    updateCurrentRoom(data.room);
+    updateCurrentRoom(data.roomName);
+    $('#current-players ul').append('<li>'+data.players[0].name+'</li>')
 });
 
 socket.on('player-joined', function(player) {
