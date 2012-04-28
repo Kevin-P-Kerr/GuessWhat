@@ -7,8 +7,17 @@
 </head>
 
 <body>
-  <div class="hello">
-    <h1>Hello World!</h1>
+  <div class="header">
+    <h1>GUESS WHAT</h1>
+  </div>
+	<div id="roomName" class="hidden">
+	</div>
+	<form class="lobby" id="room">
+		<p>
+			<input type="text" id="formText" placeholder="enter a room">
+		</p>
+		<input id="roomSubmit" type="submit" value="create room">
+	</form>
     <input id="start-drawing" type="button" value="start drawing" />
     <input id="clear-drawing" class="hidden" type="button" value="clear drawing" />
     <select class="hidden">
@@ -19,8 +28,7 @@
         <option value="green">green</option>
         <option value="red">red</option>
     </select>
-  </div>
-  <div id="canvas-wrap">
+  <div id="canvas-wrap" class="room">
         <canvas width="500" height="500" id="canvas"></canvas>
   </div>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>

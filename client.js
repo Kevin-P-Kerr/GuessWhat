@@ -1,6 +1,8 @@
 
 var options = {};
 
+var socket = io.connect('http://localhost:8000');
+
 $("#start-drawing").click(function () {
         options = initCanvas();
 		var drawObj = new Draw(options);
@@ -13,6 +15,23 @@ $("#start-drawing").click(function () {
 $("#clear-drawing").click(function () {
 	options.canvas.width = options.canvas.width;
 });
+
+$("#roomSubmit").click(function (e) {
+	e.preventDefault();
+	var input = $("#formText").val();
+	socket.emit("createRoom", {roomName : input});
+});
+
+socket.on("roomCreated", function (data) {
+	$(".lobby").hide();
+	$(".room").fadeIn(1000);
+	$("#roomName").removeClass("hidden");
+	$("#roomName").html("<h3>" + data.name + "</h3>");
+});
+
+socket.on("yo", function (data) {
+	console.log("we got this\n");
+	});
 
 var initCanvas = function() {
     var canvas = document.getElementById("canvas");
@@ -89,10 +108,3 @@ var getCursorCoords = function (ctx) {
     });
     
 };
-
-var socket = io.connect('http://localhost:8000');
-socket.emit('how-are-you', {from:"me"});
-
-socket.on('im-well', function(data) {
-    console.log(data);
-});

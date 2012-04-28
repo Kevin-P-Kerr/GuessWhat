@@ -2,6 +2,12 @@ var http = require('http');
 var url = require("url");
 var fs = require('fs');
 var io = require("socket.io");
+var players = require("./player.js");
+var rooms = require("./rooms.js");
+
+var roomData = {};
+
+var wordList = ["monkey", "banana", "fish", "tree", "baseball", "James Madison"];
 
 function start(route) {
 	function onRequest(request, response) {
@@ -29,13 +35,26 @@ function start(route) {
     server.listen(8000);
 	console.log("Server has started");
 
-    io.sockets.on('connection', function(socket){
-        socket.emit('hello', {who:"you"});
-        socket.on('how-are-you', function(data) {
-            console.log(data);
-            socket.emit('im-well', {feeling:'fine'})
+    io.sockets.on('connection', function(socket) {
+		var player = new players.Player({socket : socket})
+		socket.set("playerObj", player, function () {
+			console.log("we made the player!");
+		});
+		socket.on("createRoom", function (obj) {
+			if (roomData.hasOwnProperty(obj.roomName)) {
+				socket.emit("roomExists", {err : "room exists"});
+			} else {
+				socket.emit("yo", {what : "is going on?"})
+				socket.get("playerObj", function (err, player) {
+					console.log("this is obj.roomName" + obj.roomName);
+					obj.player = player;
+					var newRoom = new rooms.Room(obj);
+                    roomData[obj.roomName] = newRoom;
+					socket.emit("roomCreated", {room : obj.roomName});
+				});
+			}
+	});
         })
-    });
 };
 
 exports.start = start;
