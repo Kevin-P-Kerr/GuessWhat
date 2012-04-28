@@ -59,12 +59,16 @@ function start(route) {
 	    });
 
         socket.on("join-room", function(room) {
-            var room = roomData[room.room];
+			console.log("the first room is this " + room);
+			console.log("room.room is " + room.room);
+            var livingRoom = roomData[room.room];
+			console.log("livingRoom is " + livingRoom);
+			console.log("livingRoom. is " + livingRoom.roomName);
             socket.get("player", function(err, player) {
-                room.players.push(player);
-                socket.in(room.name).emit('player-joined', player);
-                socket.join(room.name);
-                socket.emit('room-joined', room);
+                livingRoom.players.push(player);
+                socket.in(livingRoom.roomName).emit('player-joined', player);
+                socket.join(livingRoom.roomName);
+                socket.emit('room-joined', livingRoom);
             });
         });
 

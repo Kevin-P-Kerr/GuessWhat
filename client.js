@@ -38,8 +38,8 @@ socket.on('player-joined', function(player) {
 });
 
 socket.on('room-joined', function(room) {
-    console.log('rj: '+room.name);
-    updateCurrentRoom(room.name);
+    console.log('rj: '+room.roomName);
+    updateCurrentRoom(room.roomName);
 });
 
 var updateRooms = function(roomObj) {
