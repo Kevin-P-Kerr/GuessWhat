@@ -65,9 +65,11 @@ function start(route) {
             var livingRoom = roomData[room.room];
 			console.log("livingRoom is " + livingRoom);
 			console.log("livingRoom. is " + livingRoom.roomName);
-            socket.get("player", function(err, player) {
+            socket.get("playerObj", function(err, player) {
+				console.log("this is "+livingRoom.roomName);
                 livingRoom.players.push(player);
-                socket.in(livingRoom.roomName).emit('player-joined', player);
+				console.log("server: 71" + player);
+                io.sockets.in(livingRoom.roomName).emit('player-changed', {players : livingRoom.players});
                 socket.join(livingRoom.roomName);
                 socket.emit('room-joined', livingRoom);
             });

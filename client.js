@@ -30,25 +30,29 @@ var updateCurrentRoom = function(room) {
 };
 
 var updateCurrentPlayers = function (players) {
-    var $ul = $('#current-players ul');
-    $ul.empty();
-    players.forEach(function(player) {
-        $ul.append('<li>'+player.name+'</li>');
-    });
+	console.log("players are: "+players[0].name);
+	var n;
+	var ul = $('div#current-players ul');
+	ul.empty();
+	for (n=0; n<players.length; n++) {
+		ul.append('<li><a href="#">'+players[n].name+'</a></li>');
+	}
 };
 
 socket.on("roomCreated", function (data) {
     updateCurrentRoom(data.roomName);
-    $('#current-players ul').append('<li>'+data.players[0].name+'</li>')
+    $('#current-players ul').append('<li>'+data.players[0].name+'</li>');
 });
 
-socket.on('player-joined', function(player) {
-    
+socket.on('player-changed', function(data) {
+   updateCurrentPlayers(data.players);
 });
 
 socket.on('room-joined', function(room) {
     console.log('rj: '+room.roomName);
     updateCurrentRoom(room.roomName);
+	console.log(room.players);
+	updateCurrentPlayers(room.players);
 });
 
 var updateRooms = function(roomObj) {
