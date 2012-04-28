@@ -10,3 +10,7 @@
 #canvas {
     border: green 1px solid;
 }
+
+.room {
+    display: none;
+}

@@ -26,7 +26,7 @@ socket.on("roomCreated", function (data) {
 	$(".lobby").hide();
 	$(".room").fadeIn(1000);
 	$("#roomName").removeClass("hidden");
-	$("#roomName").html("<h3>" + data.name + "</h3>");
+	$("#roomName").html("<h3>" + data.room + "</h3>");
 });
 
 socket.on("yo", function (data) {
