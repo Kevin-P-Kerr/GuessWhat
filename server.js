@@ -73,6 +73,10 @@ function start(route) {
                 socket.join(livingRoom.roomName);
                 socket.emit('room-joined', livingRoom);
             });
+            if (livingRoom.playing === false && livingRoom.players.length > 1) {
+                livingRoom.playing = true;
+                socket.emit('room-ready');
+            }
         });
 
     })

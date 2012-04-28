@@ -26,9 +26,11 @@
 		</p>
 		<input id="roomSubmit" type="submit" value="create room">
 	</form>
-    <input id="start-drawing" class="room" type="button" value="start drawing" />
-    <input id="clear-drawing" class="room" type="button" value="clear drawing" />
-    <select class="room">
+    <p class="pre-game">Waiting for another player</p>
+    <input id="start-game" class="room" type="button" value="start game" />
+    <input id="start-drawing" class="now-playing" type="button" value="start drawing" />
+    <input id="clear-drawing" class="now-playing" type="button" value="clear drawing" />
+    <select class="now-playing">
         <option value="black">black</option>
         <option value="purple">purple</option>
         <option value="blue">blue</option>
@@ -36,7 +38,7 @@
         <option value="green">green</option>
         <option value="red">red</option>
     </select>
-    <div id="canvas-wrap" class="room">
+    <div id="canvas-wrap" class="now-playing">
         <canvas width="500" height="500" id="canvas"></canvas>
     </div>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>

@@ -24,7 +24,7 @@ $("#roomSubmit").click(function (e) {
 
 var updateCurrentRoom = function(room) {
 	$(".lobby").hide();
-	$(".room").fadeIn(1000);
+	//$(".room").fadeIn(1000);
 	$("#roomName").removeClass("hidden")
                   .html("<h3>" + room + "</h3>");
 };
@@ -63,6 +63,11 @@ var updateRooms = function(roomObj) {
     }
 
 };
+
+socket.on('room-ready', function() {
+    $('.pre-game').hide();
+    $('#start-game').show();
+    });
 
 socket.on("current-rooms", function(roomData) {
     updateRooms(roomData);
