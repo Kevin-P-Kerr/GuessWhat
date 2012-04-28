@@ -36,25 +36,39 @@ function start(route) {
 	console.log("Server has started");
 
     io.sockets.on('connection', function(socket) {
+        socket.emit("current-rooms", roomData);
 		var player = new players.Player({socket : socket})
 		socket.set("playerObj", player, function () {
 			console.log("we made the player!");
 		});
+
 		socket.on("createRoom", function (obj) {
 			if (roomData.hasOwnProperty(obj.roomName)) {
 				socket.emit("roomExists", {err : "room exists"});
 			} else {
-				socket.emit("yo", {what : "is going on?"})
 				socket.get("playerObj", function (err, player) {
 					console.log("this is obj.roomName" + obj.roomName);
 					obj.player = player;
 					var newRoom = new rooms.Room(obj);
                     roomData[obj.roomName] = newRoom;
+                    socket.join(obj.roomName);
 					socket.emit("roomCreated", {room : obj.roomName});
+                    socket.broadcast.emit("current-rooms", roomData);
 				});
 			}
-	});
-        })
+	    });
+
+        socket.on("join-room", function(room) {
+            var room = roomData[room.room];
+            socket.get("player", function(err, player) {
+                room.players.push(player);
+                socket.in(room.name).emit('player-joined', player);
+                socket.join(room.name);
+                socket.emit('room-joined', room);
+            });
+        });
+
+    })
 };
 
 exports.start = start;

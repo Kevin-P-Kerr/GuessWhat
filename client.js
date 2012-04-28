@@ -22,16 +22,44 @@ $("#roomSubmit").click(function (e) {
 	socket.emit("createRoom", {roomName : input});
 });
 
-socket.on("roomCreated", function (data) {
+var updateCurrentRoom = function(room) {
 	$(".lobby").hide();
 	$(".room").fadeIn(1000);
-	$("#roomName").removeClass("hidden");
-	$("#roomName").html("<h3>" + data.room + "</h3>");
+	$("#roomName").removeClass("hidden")
+                  .html("<h3>" + room + "</h3>");
+};
+
+socket.on("roomCreated", function (data) {
+    updateCurrentRoom(data.room);
 });
 
-socket.on("yo", function (data) {
-	console.log("we got this\n");
-	});
+socket.on('player-joined', function(player) {
+    
+});
+
+socket.on('room-joined', function(room) {
+    console.log('rj: '+room.name);
+    updateCurrentRoom(room.name);
+});
+
+var updateRooms = function(roomObj) {
+    var prop;
+    var ul = $('div#current-rooms ul');
+    for (prop in roomObj) {
+        ul.append('<li><a href="#">'+prop+'</a></li>');
+    }
+
+};
+
+socket.on("current-rooms", function(roomData) {
+    updateRooms(roomData);
+});
+
+$('#current-rooms').on('click', 'a', function(e) {
+    e.preventDefault();
+    var room = $(this).text();
+    socket.emit('join-room', {room:room});
+});
 
 var initCanvas = function() {
     var canvas = document.getElementById("canvas");
