@@ -34,3 +34,7 @@
 #start-game {
 	display: none;
 }
+
+.winner {
+	display: none;
+}

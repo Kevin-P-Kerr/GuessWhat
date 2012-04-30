@@ -107,6 +107,17 @@ function start(route) {
 			io.sockets.in(room.name).emit("clear-canvas", {});
 		});
     });
+		socket.on("guess", function(guess) {
+		console.log("someone made a guess " + guess.guess);
+			socket.get('room', function (err, room) {
+				console.log("the answer: " + room.currentWord);
+				if (room.currentWord ===  guess.guess.toLowerCase()) {
+					socket.get('playerObj', function (err, player) {
+						io.sockets.in(room.name).emit("winner", {winner : player.name});
+					});
+				}
+			});
+		});
 });
 };
 

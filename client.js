@@ -29,6 +29,20 @@ socket.on("round-started", function () {
 	}
 });
 
+$("#guess-button").click(function (e) {
+	e.preventDefault();
+	var val = $("#guess-val").val();
+	socket.emit("guess", {guess: val});
+	$("#guess-val").val('');
+});
+
+socket.on("winner", function (winner) {
+	var winUser = winner.winner;
+	$("#winner").show();
+	$("#winner h1").text(winUser + "Wins!");
+	alert("The Winner Is " + winUser + "!");
+});
+
 $("#clear-drawing").click(function () {
 	options.canvas.width = options.canvas.width;
 	socket.emit("clear-drawing", {});
