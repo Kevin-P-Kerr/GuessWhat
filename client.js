@@ -122,7 +122,7 @@ var initDrawingSession = function (drawObj) {
 	$('#canvas').mouseup(function (e) {
         console.log('mouseup fired');
 		drawObj.isDrawing = false;
-        emitLine(drawObj.line);
+        emitLine(drawObj.line, drawObj.color);
 	});
 	$('#canvas').mousemove(function (e) {
         console.log('mousemove called');
@@ -141,13 +141,13 @@ var initDrawingSession = function (drawObj) {
 var viewDrawingSession = function (drawObj) {
     console.log('viewDrawingSession client.js 142 called');
     socket.on('update-drawing', function(updatedLine) {
-       drawObj.viewLine(updatedLine.line); 
+       drawObj.viewLine(updatedLine.line, updatedLine.color); 
     });
 };	
 
-var emitLine = function(line) {
+var emitLine = function(line, color) {
     console.log('emitLine client.js 148 called');
-    socket.emit('line-data', {line:line});
+    socket.emit('line-data', {line: line, color: color});
 };
 		
 var Draw = function (options) {
@@ -176,9 +176,10 @@ Draw.prototype.drawLine = function () {
 	this.ctx.stroke();
 };
 
-Draw.prototype.viewLine = function(line) {
+Draw.prototype.viewLine = function(line, color) {
     console.log('viewLine client.js 178 called');
     this.line = line;
+	this.color = color;
     this.drawLine();
 };
 
