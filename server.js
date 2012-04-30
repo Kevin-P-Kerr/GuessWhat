@@ -96,6 +96,12 @@ function start(route) {
             });
         });
 
+        socket.on('line-data', function(lineData) {
+            console.log('line-data server.js 100 called');
+            socket.get('room', function(err, room) {
+                io.sockets.in(room.name).emit('update-drawing', lineData);
+            });
+        });
     })
 };
 

@@ -6,7 +6,7 @@ var socket = io.connect('http://localhost:8000');
 socket.on("start-drawing", function (word) {
         console.log("start drawing fired");
 		isDrawing = true;
-		$("#start-drawing").addClass("hidden");
+		$("#start-game").hide('slow');
 		$(".now-drawing").show();
 		options = initCanvas();
 		var drawObj = new Draw(options);
@@ -22,6 +22,9 @@ socket.on("round-started", function () {
 	$("#canvas-wrap").show();
 	if (!isDrawing) {
 		$(".guessing").show();
+        options = initCanvas();
+        var drawObj = new Draw(options);
+        viewDrawingSession(drawObj);
 	}
 });
 
@@ -119,6 +122,7 @@ var initDrawingSession = function (drawObj) {
 	$('#canvas').mouseup(function (e) {
         console.log('mouseup fired');
 		drawObj.isDrawing = false;
+        emitLine(drawObj.line);
 	});
 	$('#canvas').mousemove(function (e) {
         console.log('mousemove called');
@@ -132,7 +136,19 @@ var initDrawingSession = function (drawObj) {
         var color = $('select option:selected').val();
         drawObj.setColor(color);
     });
+};
+
+var viewDrawingSession = function (drawObj) {
+    console.log('viewDrawingSession client.js 142 called');
+    socket.on('update-drawing', function(updatedLine) {
+       drawObj.viewLine(updatedLine.line); 
+    });
 };	
+
+var emitLine = function(line) {
+    console.log('emitLine client.js 148 called');
+    socket.emit('line-data', {line:line});
+};
 		
 var Draw = function (options) {
 	this.color = options.color || "black";
@@ -158,6 +174,12 @@ Draw.prototype.drawLine = function () {
 	}
     this.ctx.strokeStyle = this.color;
 	this.ctx.stroke();
+};
+
+Draw.prototype.viewLine = function(line) {
+    console.log('viewLine client.js 178 called');
+    this.line = line;
+    this.drawLine();
 };
 
 Draw.prototype.setColor = function(color) {
