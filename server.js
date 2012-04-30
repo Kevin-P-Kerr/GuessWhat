@@ -102,7 +102,12 @@ function start(route) {
                 io.sockets.in(room.name).emit('update-drawing', lineData);
             });
         });
-    })
+		socket.on("clear-drawing", function () {
+			socket.get('room', function(err, room) {
+			io.sockets.in(room.name).emit("clear-canvas", {});
+		});
+    });
+});
 };
 
 exports.start = start;

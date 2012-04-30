@@ -25,11 +25,13 @@ socket.on("round-started", function () {
         options = initCanvas();
         var drawObj = new Draw(options);
         viewDrawingSession(drawObj);
+		clearCanvas(drawObj);
 	}
 });
 
 $("#clear-drawing").click(function () {
 	options.canvas.width = options.canvas.width;
+	socket.emit("clear-drawing", {});
 });
 
 $("#roomSubmit").click(function (e) {
@@ -144,6 +146,13 @@ var viewDrawingSession = function (drawObj) {
        drawObj.viewLine(updatedLine.line, updatedLine.color); 
     });
 };	
+
+var clearCanvas = function (drawObj) {
+	console.log("client 150: clear Canvas reached");
+	socket.on("clear-canvas", function () {
+		options.canvas.width = options.canvas.width;
+	});
+};
 
 var emitLine = function(line, color) {
     console.log('emitLine client.js 148 called');
