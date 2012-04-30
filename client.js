@@ -40,7 +40,9 @@ socket.on("winner", function (winner) {
 	var winUser = winner.winner;
 	$("#winner").show();
 	$("#winner h1").text(winUser + "Wins!");
-	alert("The Winner Is " + winUser + "!");
+    $('.guessing').hide();
+    $('.now-drawing').hide();
+    $('.now-playing').hide();
 });
 
 $("#clear-drawing").click(function () {

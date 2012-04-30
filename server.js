@@ -7,8 +7,6 @@ var rooms = require("./rooms.js");
 
 var roomData = {};
 
-var wordList = ["monkey", "banana", "fish", "tree", "baseball", "James Madison"];
-
 function start(route) {
 	function onRequest(request, response) {
 		var pathname = url.parse(request.url).pathname;
@@ -113,12 +111,20 @@ function start(route) {
 				console.log("the answer: " + room.currentWord);
 				if (room.currentWord ===  guess.guess.toLowerCase()) {
 					socket.get('playerObj', function (err, player) {
+                        player.score += 3;
+                        room.drawer.score += 3;
 						io.sockets.in(room.name).emit("winner", {winner : player.name});
+                        setTimeout(getNextRound(room), 5000);
 					});
 				}
 			});
 		});
-});
+    var getNextRound = function(room) {
+        room.prepRound();
+        io.sockets.socket(room.drawer.id).emit('start-drawing', {word: room.currentWord});
+        io.sockets.in(room.name).emit('round-started');
+    };
+    });
 };
 
 exports.start = start;
