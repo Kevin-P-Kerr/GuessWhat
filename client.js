@@ -41,6 +41,7 @@ var updateCurrentPlayers = function (players) {
 
 socket.on("roomCreated", function (data) {
     updateCurrentRoom(data.roomName);
+    $('.pre-game').show('slow');
     $('#current-players ul').append('<li>'+data.players[0].name+'</li>');
 });
 

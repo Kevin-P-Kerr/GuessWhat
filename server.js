@@ -50,11 +50,13 @@ function start(route) {
 					console.log("this is obj.roomName" + obj.roomName);
 					obj.player = player;
 					var newRoom = new rooms.Room(obj);
-                    roomData[obj.roomName] = newRoom;
-                    socket.join(obj.roomName);
-                    console.log('nr obj: '+newRoom);
-					socket.emit("roomCreated", newRoom);
-                    socket.broadcast.emit("current-rooms", roomData);
+                    socket.set('room', newRoom, function() {
+                        roomData[obj.roomName] = newRoom;
+                        socket.join(obj.roomName);
+                        console.log('nr obj: '+newRoom);
+					    socket.emit("roomCreated", newRoom);
+                        socket.broadcast.emit("current-rooms", roomData);
+                    }
 				});
 			}
 	    });
@@ -68,6 +70,8 @@ function start(route) {
             socket.get("playerObj", function(err, player) {
 				console.log("this is "+livingRoom.roomName);
                 livingRoom.players.push(player);
+                socket.set('room', livingRoom, function() {
+                });
 				console.log("server: 71" + player);
                 io.sockets.in(livingRoom.roomName).emit('player-changed', {players : livingRoom.players});
                 socket.join(livingRoom.roomName);
@@ -75,8 +79,17 @@ function start(route) {
             });
             if (livingRoom.playing === false && livingRoom.players.length > 1) {
                 livingRoom.playing = true;
-                socket.emit('room-ready');
+                var sock = livingRoom.drawer.id;
+                io.sockets.socket(sock).emit('room-ready');
             }
+        });
+
+        socket.on('begin-game', function() {
+            socket.get('room', function(err, room) {
+                room.preRound();
+                io.sockets.socket(room.drawer.id).emit('begin-drawing', {word:this.currentWord});
+                io.sockets.in(room.name).emit('round-started');
+            });
         });
 
     })
