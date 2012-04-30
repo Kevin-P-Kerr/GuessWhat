@@ -16,9 +16,21 @@
 }
 
 .now-playing {
-    display: none;
+	display: none;
+}
+
+.now-drawing {
+	display: none;
 }
 
 .pre-game {
     display: none;
+}
+
+.guessing {
+	display: none;
+}
+
+#start-game {
+	display: none;
 }

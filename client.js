@@ -1,16 +1,29 @@
 
 var options = {};
-
+var isDrawing = false;
 var socket = io.connect('http://localhost:8000');
 
-$("#start-drawing").click(function () {
-        options = initCanvas();
+socket.on("start-drawing", function (word) {
+        console.log("start drawing fired");
+		isDrawing = true;
+		$("#start-drawing").addClass("hidden");
+		$(".now-drawing").show();
+		options = initCanvas();
 		var drawObj = new Draw(options);
 		$("select").removeClass("hidden");
 		$("#clear-drawing").removeClass("hidden");
 		$(this).addClass("hidden");
         initDrawingSession(drawObj);
+		$("#word").text(word.word);
     });
+
+socket.on("round-started", function () {
+	console.log("round started fired");
+	$("#canvas-wrap").show();
+	if (!isDrawing) {
+		$(".guessing").show();
+	}
+});
 
 $("#clear-drawing").click(function () {
 	options.canvas.width = options.canvas.width;
@@ -42,6 +55,7 @@ var updateCurrentPlayers = function (players) {
 socket.on("roomCreated", function (data) {
     updateCurrentRoom(data.roomName);
     $('.pre-game').show('slow');
+	$('.room').show('slow');
     $('#current-players ul').append('<li>'+data.players[0].name+'</li>');
 });
 
@@ -54,6 +68,7 @@ socket.on('room-joined', function(room) {
     updateCurrentRoom(room.roomName);
 	console.log(room.players);
 	updateCurrentPlayers(room.players);
+	$('.room').show('slow');
 });
 
 var updateRooms = function(roomObj) {
@@ -69,6 +84,10 @@ socket.on('room-ready', function() {
     $('.pre-game').hide();
     $('#start-game').show();
     });
+
+$("#start-game").click(function () {
+	socket.emit("begin-game", {});
+});
 
 socket.on("current-rooms", function(roomData) {
     updateRooms(roomData);

@@ -56,7 +56,7 @@ function start(route) {
                         console.log('nr obj: '+newRoom);
 					    socket.emit("roomCreated", newRoom);
                         socket.broadcast.emit("current-rooms", roomData);
-                    }
+                    });
 				});
 			}
 	    });
@@ -79,15 +79,19 @@ function start(route) {
             });
             if (livingRoom.playing === false && livingRoom.players.length > 1) {
                 livingRoom.playing = true;
-                var sock = livingRoom.drawer.id;
+                var sock = livingRoom.players[0].id;
                 io.sockets.socket(sock).emit('room-ready');
             }
         });
 
         socket.on('begin-game', function() {
             socket.get('room', function(err, room) {
-                room.preRound();
-                io.sockets.socket(room.drawer.id).emit('begin-drawing', {word:this.currentWord});
+				for (var prop in room) {
+					console.log(prop);
+				}
+                room.prepRound();
+				console.log("server 90: room.drawer.id is " + room.drawer.id);
+                io.sockets.socket(room.drawer.id).emit('start-drawing', {word: room.currentWord});
                 io.sockets.in(room.name).emit('round-started');
             });
         });

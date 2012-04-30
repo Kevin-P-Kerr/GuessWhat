@@ -14,7 +14,7 @@
         <h3>Current Rooms</h3>
         <ul></ul>
     </div>
-    <div id="roomName" class="hidden">
+    <div id="roomName" class="room">
 	</div>
     <div id="current-players" class="room">
         <h3>Current Players</h3>
@@ -27,10 +27,17 @@
 		<input id="roomSubmit" type="submit" value="create room">
 	</form>
     <p class="pre-game">Waiting for another player</p>
-    <input id="start-game" class="room" type="button" value="start game" />
-    <input id="start-drawing" class="now-playing" type="button" value="start drawing" />
-    <input id="clear-drawing" class="now-playing" type="button" value="clear drawing" />
-    <select class="now-playing">
+	<h3 class="now-drawing"> Draw the word
+		<span id="word"> </span>
+	</h3>
+	<h3 class="guessing">Guess The Word</h3>
+	<form class="guessing">
+			<input type="text" id="guess" placeholder="place your guess">
+			<input class="guessing" type="submit" value="place guess">
+	</form>
+    <input id="start-game" type="button" value="start game" />
+    <input id="clear-drawing" class="now-drawing" type="button" value="clear drawing" />
+    <select class="now-drawing">
         <option value="black">black</option>
         <option value="purple">purple</option>
         <option value="blue">blue</option>

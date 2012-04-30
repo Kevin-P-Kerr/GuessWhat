@@ -10,6 +10,8 @@ var Room = function (options) {
 Room.words = ['banana','apple','train','car','building','baseball','field','chair','river','fish'];
 
 Room.prototype.prepRound = function () {
+	console.log("this.prepRound called, roomsjs 13");
+
     this.drawer = this.drawer ? this.nextDrawer(this.drawer) : this.players[0];
     this.currentWord = this.nextWord();
 };
@@ -29,10 +31,12 @@ Room.prototype.nextDrawer = function (drawer) {
 };
 
 Room.prototype.nextWord = function () {
-    var word, i;
-    while(word && this.solvedWords.indexOf(word) === -1) {
+    console.log("made it to nextWord");
+	var word='', i;
+    while(word==='' || this.solvedWords.indexOf(word) !== -1) {
         i = Math.floor(Math.random() * Room.words.length);
         word = Room.words[i];
+		console.log("rooms 36: words[i] is " + word);
     }
     this.solvedWords.push(word);
     return word;
